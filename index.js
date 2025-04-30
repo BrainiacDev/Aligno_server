@@ -17,6 +17,11 @@ const app = express();
 const server = http.createServer(app); // Create an HTTP server
 const io = initializeSocket(server); // Initialize WebSocket
 
+// Root route for testing the server
+app.get("/", (req, res) => {
+  res.send("Aligno server is running! 🚀");
+});
+
 // Middleware
 app.use(express.json());
 app.use(
