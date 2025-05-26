@@ -120,6 +120,31 @@ export async function loginUserController(req, res) {
   }
 }
 
+// Get user details
+export async function getUserDetailsController(req, res, next) {
+  try {
+    const userId = req.user?.id || req.params.userId; // From middleware or params
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const user = await User.findById(userId).select("-password -refreshToken -resetCode -resetCodeExpiry");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 // Logout User
 export async function logoutUserController(req, res, next) {
   try {
